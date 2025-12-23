@@ -121,7 +121,7 @@ PostgreSQL admin user se login:
 psql -U postgres
 ```
 
-Database aur user create karo:
+Database creation and permission:
 ```sql
 CREATE DATABASE threat_monitoring;
 CREATE USER threat_user WITH PASSWORD 'admin@123';
