@@ -13,7 +13,7 @@ The system ingests security events, automatically generates alerts for **High/Cr
 * **Backend:** Python, Django
 * **API Framework:** Django REST Framework (DRF)
 * **Authentication:** JWT (SimpleJWT)
-* **Database:** PostgreSQL / SQLite
+* **Database:** PostgreSQL
 * **Version Control:** Git
 
 ### Optional Enhancements
@@ -113,6 +113,51 @@ python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\\Scripts\\activate   # Windows
 pip install -r requirements.txt
+
+###Django project ke liye PostgreSQL database configuration.
+
+PostgreSQL admin user se login:
+```bash
+psql -U postgres
+```
+
+Database aur user create karo:
+```sql
+CREATE DATABASE threat_monitoring;
+CREATE USER threat_user WITH PASSWORD 'admin@123';
+ALTER ROLE threat_user SET client_encoding TO 'utf8';
+ALTER ROLE threat_user SET default_transaction_isolation TO 'read committed';
+ALTER ROLE threat_user SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE threat_monitoring TO threat_user;
+\c threat_monitoring;
+GRANT ALL PRIVILEGES ON SCHEMA public TO threat_user;
+ALTER USER threat_user CREATEDB;
+```
+
+PostgreSQL driver install:
+```bash
+pip install psycopg2-binary
+```
+
+Django `settings.py` database configuration:
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'threat_monitoring',
+        'USER': 'threat_user',
+        'PASSWORD': 'admin@123',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+Notes:
+- Database name: threat_monitoring
+- Database user: threat_user
+- PostgreSQL service running honi chahiye
+- Tables Django migrations se automatically create honge
+
 # OR if requirements.txt not available:
 pip install django djangorestframework djangorestframework-simplejwt psycopg2-binary
 python manage.py migrate
